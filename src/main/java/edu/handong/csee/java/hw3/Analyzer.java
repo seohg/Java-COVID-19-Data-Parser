@@ -31,12 +31,13 @@ public class Analyzer {
 				newData[i][j]=patients[j];
 			}
 		}
-		for(int i=0;i<data.length;i++) {
+		
+		/*for(int i=0;i<data.length;i++) {
 			for(int j=0;j<column.length;j++) {
 				System.out.printf("%s ",newData[i][j]);
 			}
 			System.out.println();
-		}
+		}*/
 	}
 	
 	public int getNumberOfCountries(){
