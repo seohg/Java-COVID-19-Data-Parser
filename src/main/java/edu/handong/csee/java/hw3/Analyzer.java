@@ -6,15 +6,15 @@ public class Analyzer {
 	private String[] column;
 	private String[] patients;
 	
-	private int NumberOfCountries;
-	private int NumberOfAllPatients;
-	private int NumberOfPatientsOfACountry;
-	private int NumberOfPatientsFromASpecifiedDate;
-	private int NumberOfPatientsBeforeASpecifiedDate;
-	private int NumberOfPatientsBetweenTwoDates;
+	private int numberOfCountries;
+	private int numberOfAllPatients;
+	private int numberOfPatientsOfACountry;
+	private int numberOfPatientsFromASpecifiedDate;
+	private int numberOfPatientsBeforeASpecifiedDate;
+	private int numberOfPatientsBetweenTwoDates;
 	
 	public Analyzer(String[] data){
-		NumberOfCountries=data.length-1;
+		numberOfCountries=data.length-1;
 		column=data[0].split(",");
 		patients=new String[data.length];
 		newData=new String[data.length][column.length];
@@ -40,32 +40,32 @@ public class Analyzer {
 	}
 	
 	public int getNumberOfCountries(){
-		return NumberOfCountries;
+		return numberOfCountries;
 	}
 	
 	public int getNumberOfAllPatients(){
-		NumberOfAllPatients=0;
-		for(int i=1;i<=NumberOfCountries;i++) {
-			NumberOfAllPatients+=Util.convertStringToInteger(newData[i][column.length-1]);
+		numberOfAllPatients=0;
+		for(int i=1;i<=numberOfCountries;i++) {
+			numberOfAllPatients+=Util.convertStringToInteger(newData[i][column.length-1]);
 		}
-		return NumberOfAllPatients;
+		return numberOfAllPatients;
 	}
 	
 	public int getNumberOfPatientsOfACountry(String countryName){		
-		NumberOfPatientsOfACountry=0;
-		for(int i=1;i<=NumberOfCountries;i++) {
+		numberOfPatientsOfACountry=0;
+		for(int i=1;i<=numberOfCountries;i++) {
 			if(countryName.equals(newData[i][1])) {
-				NumberOfPatientsOfACountry+=Util.convertStringToInteger(newData[i][column.length-1]);
+				numberOfPatientsOfACountry+=Util.convertStringToInteger(newData[i][column.length-1]);
 			}
 		}
 
-		return NumberOfPatientsOfACountry;
+		return numberOfPatientsOfACountry;
 	}
 	
 	
 	public int getNumberOfPatientsFromASpecifiedDate(String date){
 		int idx=0;
-		NumberOfPatientsFromASpecifiedDate=0;
+		numberOfPatientsFromASpecifiedDate=0;
 		
 		for(int j=4;j<column.length;j++) {
 			if(date.equals(newData[0][j])) {
@@ -77,21 +77,21 @@ public class Analyzer {
 			return -1;
 		}
 		if(idx==4) {
-			for(int i=1;i<=NumberOfCountries;i++) {
-				NumberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx]);
+			for(int i=1;i<=numberOfCountries;i++) {
+				numberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx]);
 			}
 		}
 		if(idx>4) {
-			for(int i=1;i<=NumberOfCountries;i++) {
-				NumberOfPatientsFromASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx])-Util.convertStringToInteger(newData[i][idx-1]));
+			for(int i=1;i<=numberOfCountries;i++) {
+				numberOfPatientsFromASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx])-Util.convertStringToInteger(newData[i][idx-1]));
 			}
 		}
-		return NumberOfPatientsFromASpecifiedDate;
+		return numberOfPatientsFromASpecifiedDate;
 	}
 	
 	public int getNumberOfPatientsBeforeASpecifiedDate(String date){
 		int idx=0;
-		NumberOfPatientsBeforeASpecifiedDate=0;
+		numberOfPatientsBeforeASpecifiedDate=0;
 		
 		for(int j=4;j<column.length;j++) {
 			if(date.equals(newData[0][j])) {
@@ -103,22 +103,22 @@ public class Analyzer {
 			return -1;
 		}
 		if(idx==5) {
-			for(int i=1;i<=NumberOfCountries;i++) {
-				NumberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx-1]);
+			for(int i=1;i<=numberOfCountries;i++) {
+				numberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx-1]);
 			}
 		}
 		if(idx>5) {
-			for(int i=1;i<=NumberOfCountries;i++) {
-				NumberOfPatientsBeforeASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx-1])-Util.convertStringToInteger(newData[i][idx-2]));
+			for(int i=1;i<=numberOfCountries;i++) {
+				numberOfPatientsBeforeASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx-1])-Util.convertStringToInteger(newData[i][idx-2]));
 			}
 		}
-		return NumberOfPatientsBeforeASpecifiedDate;
+		return numberOfPatientsBeforeASpecifiedDate;
 	}
 	
 	public int getNumberOfPatientsBetweenTwoDates(String fdate,String sdate){
 		int fidx=0;
 		int sidx=0;
-		NumberOfPatientsBetweenTwoDates=0;
+		numberOfPatientsBetweenTwoDates=0;
 		
 		for(int j=4;j<column.length;j++) {
 			if(fdate.equals(newData[0][j])) {
@@ -141,10 +141,10 @@ public class Analyzer {
 			sidx=tmp;
 		}
 		
-		for(int i=1;i<=NumberOfCountries;i++) {
-			NumberOfPatientsBetweenTwoDates+=(Util.convertStringToInteger(newData[i][sidx])-Util.convertStringToInteger(newData[i][fidx]));
+		for(int i=1;i<=numberOfCountries;i++) {
+			numberOfPatientsBetweenTwoDates+=(Util.convertStringToInteger(newData[i][sidx])-Util.convertStringToInteger(newData[i][fidx]));
 		}
 		
-		return NumberOfPatientsBetweenTwoDates;
+		return numberOfPatientsBetweenTwoDates;
 	}	
 }
