@@ -4,7 +4,7 @@ public class Analyzer {
 	
 	private String[][] newData;
 	private String[] column;
-	private String[] row;
+	private String[] patients;
 	
 	private int NumberOfCountries;
 	private int NumberOfAllPatients;
@@ -16,19 +16,19 @@ public class Analyzer {
 	public Analyzer(String[] data){
 		NumberOfCountries=data.length-1;
 		column=data[0].split(",");
-		row=new String[data.length];
+		patients=new String[data.length];
 		newData=new String[data.length][column.length];
 		
 		for(int j=0;j<column.length;j++) {
 			newData[0][j]=column[j];
 		}
 		for(int i=1;i<data.length;i++) {
-			row=data[i].split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
+			patients=data[i].split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
 			for(int j=0;j<column.length;j++) {
-				if(row[j].startsWith("\"")) {
-					row[j]=row[j].substring(1, row[j].length()-1);
+				if(patients[j].startsWith("\"")) {
+					patients[j]=patients[j].substring(1, patients[j].length()-1);
 				}
-				newData[i][j]=row[j];
+				newData[i][j]=patients[j];
 			}
 		}
 		for(int i=0;i<data.length;i++) {
