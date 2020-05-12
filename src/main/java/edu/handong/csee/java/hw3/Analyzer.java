@@ -5,9 +5,13 @@ public class Analyzer {
 	private String[][] newData;
 	private String[] column;
 	private String[] row;
+	
 	private int NumberOfCountries;
-	private int NumberOfPatients;
 	private int NumberOfAllPatients;
+	private int NumberOfPatientsOfACountry;
+	private int NumberOfPatientsFromASpecifiedDate;
+	private int NumberOfPatientsBeforeASpecifiedDate;
+	private int NumberOfPatientsBetweenTwoDates;
 	
 	public Analyzer(String[] data){
 		NumberOfCountries=data.length-1;
@@ -40,37 +44,28 @@ public class Analyzer {
 	}
 	
 	public int getNumberOfAllPatients(){
+		NumberOfAllPatients=0;
 		for(int i=1;i<=NumberOfCountries;i++) {
-			for(int j=4;j<column.length;j++) {
-				NumberOfAllPatients+=Util.convertStringToInteger(newData[i][j]);
-			}
+			NumberOfAllPatients+=Util.convertStringToInteger(newData[i][column.length-1]);
 		}
 		return NumberOfAllPatients;
 	}
 	
-	public int getNumberOfPatientsOfACountry(String countryName){
-		int idx=0;
-		
+	public int getNumberOfPatientsOfACountry(String countryName){		
+		NumberOfPatientsOfACountry=0;
 		for(int i=1;i<=NumberOfCountries;i++) {
 			if(countryName.equals(newData[i][1])) {
-				idx=i;
+				NumberOfPatientsOfACountry+=Util.convertStringToInteger(newData[i][column.length-1]);
 			}
 		}
-		if(idx==0) {
-			return -1;
-		}
-		
-		NumberOfPatients=0;
-		for(int j=4;j<column.length;j++) {
-			NumberOfPatients+=Util.convertStringToInteger(newData[idx][j]);
-		}
-		
-		return NumberOfPatients;
+
+		return NumberOfPatientsOfACountry;
 	}
 	
 	
 	public int getNumberOfPatientsFromASpecifiedDate(String date){
 		int idx=0;
+		NumberOfPatientsFromASpecifiedDate=0;
 		
 		for(int j=4;j<column.length;j++) {
 			if(date.equals(newData[0][j])) {
@@ -81,19 +76,22 @@ public class Analyzer {
 		if(idx==0) {
 			return -1;
 		}
-		
-		NumberOfPatients=0;
-		for(int i=1;i<=NumberOfCountries;i++) {
-			for(int j=4;j<=idx;j++) {
-				NumberOfPatients+=Util.convertStringToInteger(newData[i][j]);
+		if(idx==4) {
+			for(int i=1;i<=NumberOfCountries;i++) {
+				NumberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx]);
 			}
 		}
-		
-		return NumberOfPatients;
+		if(idx>4) {
+			for(int i=1;i<=NumberOfCountries;i++) {
+				NumberOfPatientsFromASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx])-Util.convertStringToInteger(newData[i][idx-1]));
+			}
+		}
+		return NumberOfPatientsFromASpecifiedDate;
 	}
 	
 	public int getNumberOfPatientsBeforeASpecifiedDate(String date){
 		int idx=0;
+		NumberOfPatientsBeforeASpecifiedDate=0;
 		
 		for(int j=4;j<column.length;j++) {
 			if(date.equals(newData[0][j])) {
@@ -101,23 +99,27 @@ public class Analyzer {
 			}
 		}
 		
-		if(idx==0) {
+		if(idx<5) {
 			return -1;
 		}
-		
-		NumberOfPatients=0;
-		for(int i=1;i<=NumberOfCountries;i++) {
-			for(int j=4;j<idx;j++) {
-				NumberOfPatients+=Util.convertStringToInteger(newData[i][j]);
+		if(idx==5) {
+			for(int i=1;i<=NumberOfCountries;i++) {
+				NumberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx-1]);
 			}
 		}
-		
-		return NumberOfPatients;
+		if(idx>5) {
+			for(int i=1;i<=NumberOfCountries;i++) {
+				NumberOfPatientsBeforeASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx-1])-Util.convertStringToInteger(newData[i][idx-2]));
+			}
+		}
+		return NumberOfPatientsBeforeASpecifiedDate;
 	}
 	
 	public int getNumberOfPatientsBetweenTwoDates(String fdate,String sdate){
 		int fidx=0;
 		int sidx=0;
+		NumberOfPatientsBetweenTwoDates=0;
+		
 		for(int j=4;j<column.length;j++) {
 			if(fdate.equals(newData[0][j])) {
 				fidx=j;
@@ -131,14 +133,18 @@ public class Analyzer {
 			return -1;
 		}
 		
-		NumberOfPatients=0;
-		for(int i=1;i<=NumberOfCountries;i++) {
-			for(int j=fidx;j<=sidx;j++) {
-				NumberOfPatients+=Util.convertStringToInteger(newData[i][j]);
-			}
+		if(sidx<fidx) {
+			int tmp;
+			
+			tmp=fidx;
+			fidx=sidx;
+			sidx=tmp;
 		}
 		
-		return NumberOfPatients;
-	}
-	
+		for(int i=1;i<=NumberOfCountries;i++) {
+			NumberOfPatientsBetweenTwoDates+=(Util.convertStringToInteger(newData[i][sidx])-Util.convertStringToInteger(newData[i][fidx]));
+		}
+		
+		return NumberOfPatientsBetweenTwoDates;
+	}	
 }
