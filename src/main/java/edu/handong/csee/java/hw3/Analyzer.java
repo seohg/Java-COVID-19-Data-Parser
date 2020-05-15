@@ -142,8 +142,12 @@ public class Analyzer {
 			sidx=tmp;
 		}
 		
-		for(int i=1;i<=numberOfCountries;i++) {
-			numberOfPatientsBetweenTwoDates+=(Util.convertStringToInteger(newData[i][sidx])-Util.convertStringToInteger(newData[i][fidx]));
+		for(int i=1;i<=1;i++) {
+			if(fidx==4) {
+				numberOfPatientsBetweenTwoDates+=Util.convertStringToInteger(newData[i][sidx]);
+			}else {
+				numberOfPatientsBetweenTwoDates+=(Util.convertStringToInteger(newData[i][sidx])-Util.convertStringToInteger(newData[i][fidx-1]));
+			}
 		}
 		
 		return numberOfPatientsBetweenTwoDates;
