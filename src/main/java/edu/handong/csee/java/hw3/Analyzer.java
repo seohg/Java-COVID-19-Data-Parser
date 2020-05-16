@@ -1,12 +1,15 @@
 package edu.handong.csee.java.hw3;
+import java.util.ArrayList;
 
 public class Analyzer {
 	
 	private String[][] newData;
 	private String[] column;
 	private String[] patients;
+	private String[] country;
 	
 	private int numberOfCountries;
+	private int numberOfProvince;
 	private int numberOfAllPatients;
 	private int numberOfPatientsOfACountry;
 	private int numberOfPatientsFromASpecifiedDate;
@@ -14,7 +17,7 @@ public class Analyzer {
 	private int numberOfPatientsBetweenTwoDates;
 	
 	public Analyzer(String[] data){
-		numberOfCountries=data.length-1;
+		numberOfProvince=data.length-1;
 		column=data[0].split(",");
 		patients=new String[data.length];
 		newData=new String[data.length][column.length];
@@ -31,7 +34,7 @@ public class Analyzer {
 				newData[i][j]=patients[j];
 			}
 		}
-		
+		//데이터가 2차원배열에 올바르게 저장되었는지 확인하기 위한 코드
 		/*for(int i=0;i<data.length;i++) {
 			for(int j=0;j<column.length;j++) {
 				System.out.printf("%s ",newData[i][j]);
@@ -41,12 +44,23 @@ public class Analyzer {
 	}
 	
 	public int getNumberOfCountries(){
+		country=new String[numberOfProvince];
+		for(int i=1;i<=numberOfProvince;i++) {
+			country[i-1]=newData[i][1];
+		}
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 0 ; i<country.length;i++){
+			if(!list.contains(country[i])){
+				list.add(country[i]);
+			}
+		}
+		numberOfCountries=list.size();
 		return numberOfCountries;
 	}
 	
 	public int getNumberOfAllPatients(){
 		numberOfAllPatients=0;
-		for(int i=1;i<=numberOfCountries;i++) {
+		for(int i=1;i<=numberOfProvince;i++) {
 			numberOfAllPatients+=Util.convertStringToInteger(newData[i][column.length-1]);
 		}
 		return numberOfAllPatients;
@@ -54,12 +68,11 @@ public class Analyzer {
 	
 	public int getNumberOfPatientsOfACountry(String countryName){		
 		numberOfPatientsOfACountry=0;
-		for(int i=1;i<=numberOfCountries;i++) {
+		for(int i=1;i<=numberOfProvince;i++) {
 			if(countryName.equals(newData[i][1])) {
 				numberOfPatientsOfACountry+=Util.convertStringToInteger(newData[i][column.length-1]);
 			}
 		}
-
 		return numberOfPatientsOfACountry;
 	}
 	
@@ -78,13 +91,13 @@ public class Analyzer {
 			return -1;
 		}
 		if(idx==4) {
-			for(int i=1;i<=numberOfCountries;i++) {
-				numberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx]);
+			for(int i=1;i<=numberOfProvince;i++) {
+				numberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][column.length-1]);
 			}
 		}
 		if(idx>4) {
-			for(int i=1;i<=numberOfCountries;i++) {
-				numberOfPatientsFromASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx])-Util.convertStringToInteger(newData[i][idx-1]));
+			for(int i=1;i<=numberOfProvince;i++) {
+				numberOfPatientsFromASpecifiedDate+=(Util.convertStringToInteger(newData[i][column.length-1])-Util.convertStringToInteger(newData[i][idx-1]));
 			}
 		}
 		return numberOfPatientsFromASpecifiedDate;
@@ -101,18 +114,13 @@ public class Analyzer {
 		}
 		
 		if(idx<5) {
-			return -1;
-		}
-		if(idx==5) {
-			for(int i=1;i<=numberOfCountries;i++) {
-				numberOfPatientsFromASpecifiedDate+=Util.convertStringToInteger(newData[i][idx-1]);
+			return 0;
+		}else{
+			for(int i=1;i<=numberOfProvince;i++) {
+				numberOfPatientsBeforeASpecifiedDate+=Util.convertStringToInteger(newData[i][idx-1]);
 			}
 		}
-		if(idx>5) {
-			for(int i=1;i<=numberOfCountries;i++) {
-				numberOfPatientsBeforeASpecifiedDate+=(Util.convertStringToInteger(newData[i][idx-1])-Util.convertStringToInteger(newData[i][idx-2]));
-			}
-		}
+		
 		return numberOfPatientsBeforeASpecifiedDate;
 	}
 	
@@ -142,7 +150,7 @@ public class Analyzer {
 			sidx=tmp;
 		}
 		
-		for(int i=1;i<=1;i++) {
+		for(int i=1;i<=numberOfProvince;i++) {
 			if(fidx==4) {
 				numberOfPatientsBetweenTwoDates+=Util.convertStringToInteger(newData[i][sidx]);
 			}else {
